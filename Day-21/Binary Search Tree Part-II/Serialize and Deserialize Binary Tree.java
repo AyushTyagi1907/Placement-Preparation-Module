@@ -1,0 +1,44 @@
+public class Codec {
+     int cnt=0;
+    TreeNode convertVecToTree(int size,String[] vec){
+        if(cnt>=size || vec[cnt].equals("N")){
+            cnt++;
+            return null;
+        } 
+        TreeNode root= new TreeNode(Integer.parseInt(vec[cnt]));
+        cnt++;
+        root.left=convertVecToTree(size,vec);
+        root.right=convertVecToTree(size,vec);
+        return root;
+        
+    }
+    void serializeTree(TreeNode root,StringBuffer s){
+        if(root==null){
+            s.append(',');
+            s.append('N');
+            return;
+        }
+        if(s.length()==0) s.append(Integer.toString(root.val));
+       else  s.append(","+Integer.toString(root.val));
+        serializeTree(root.left,s);
+        serializeTree(root.right,s);
+    }
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if(root==null) return "";
+        StringBuffer s= new StringBuffer();
+        serializeTree(root,s);
+        String ans=s.toString();
+        // System.out.println(ans);
+        return ans;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if(data=="") return null;
+        String[] vec=data.split(",");
+        TreeNode root=convertVecToTree(vec.length,vec);
+        return root;
+    }
+}
